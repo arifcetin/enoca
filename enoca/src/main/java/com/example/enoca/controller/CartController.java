@@ -2,15 +2,12 @@ package com.example.enoca.controller;
 
 import com.example.enoca.Dto.CartDto;
 import com.example.enoca.Dto.CartResponse;
-import com.example.enoca.entity.Cart;
 import com.example.enoca.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.internal.build.AllowNonPortable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/cart")

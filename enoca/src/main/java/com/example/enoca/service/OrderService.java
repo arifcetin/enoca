@@ -59,4 +59,28 @@ public class OrderService {
         cartService.emptyCart(httpServletRequest);
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
+
+    public ResponseEntity<OrderResponse> getOrderForCode(HttpServletRequest httpServletRequest) {
+        String bearer = httpServletRequest.getHeader("Authorization");
+        Long customerId = jwtTokenProvider.getUserIdFromJwt(bearer.substring("Bearer".length()+1));
+        Optional<Customer> customer = customerRepo.findById(customerId);
+        OrderResponse orderResponse = new OrderResponse();
+        List<OrderC> orderCList = orderRepo.findOrderCsByCustomer(customer.get());
+        if (!orderCList.isEmpty()){
+            orderResponse.setMessage("Order");
+            orderResponse.setOrderCList(orderRepo.findOrderCsByCustomer(customer.get()));
+            orderResponse.setTotalPrice(orderRepo.sumTotalProduct(customer.get().getCustomerId()));
+            return new ResponseEntity<>(orderResponse,HttpStatus.OK);
+        }
+        else {
+            orderResponse.setMessage("Order not found");
+            orderResponse.setOrderCList(null);
+            orderResponse.setTotalPrice(null);
+            return new ResponseEntity<>(orderResponse,HttpStatus.OK);
+        }
+    }
+
+    public List<OrderC> getAllOrdersForCustomer() {
+        return orderRepo.findAll();
+    }
 }
